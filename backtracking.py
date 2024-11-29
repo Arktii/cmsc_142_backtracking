@@ -1,5 +1,4 @@
 from time import sleep
-import tkinter as tk
 import numpy as np
 
 from graphics import GridVisualizer
@@ -7,8 +6,9 @@ from graphics import GridVisualizer
 N = 9
 SUBGRID_SIZE = 3
 
+
 def main():
-    problem = [
+    EASY = [
         [6, 9, 0, 1, 7, 0, 0, 0, 0],
         [3, 5, 0, 0, 4, 0, 1, 0, 0],
         [8, 0, 2, 3, 6, 0, 7, 0, 4],
@@ -19,6 +19,23 @@ def main():
         [0, 8, 1, 0, 0, 6, 4, 9, 0],
         [0, 7, 3, 0, 8, 2, 0, 1, 0],
     ]
+
+    HARD = [
+        [0, 0, 0, 0, 0, 3, 0, 6, 0],
+        [0, 8, 0, 0, 5, 0, 7, 0, 0],
+        [0, 1, 5, 0, 8, 0, 0, 4, 0],
+        [8, 0, 0, 3, 0, 0, 0, 0, 9],
+        [3, 4, 9, 0, 0, 6, 0, 0, 0],
+        [2, 0, 6, 0, 9, 0, 3, 7, 0],
+        [0, 0, 0, 4, 0, 0, 5, 0, 6],
+        [7, 0, 0, 0, 0, 8, 0, 0, 2],
+        [0, 9, 0, 0, 0, 0, 4, 3, 0],
+    ]
+
+    #TODO: add more problems
+
+    problem = HARD
+
     # Transposing so that grid can be accessed as grid[x][y]
     grid = np.array(problem, dtype=int).transpose()
 
@@ -40,7 +57,7 @@ def print_grid(grid: np.ndarray[int, int]):
 
 def solve(grid: np.ndarray[int, int], row, col, visualizer: GridVisualizer):
     visualizer.update_grid(grid)
-    sleep(0.1)
+    sleep(0.05)
     if row == N:
         return True
     elif col == N:
