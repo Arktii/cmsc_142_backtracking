@@ -1,5 +1,11 @@
+from time import sleep
+import tkinter as tk
 import numpy as np
 
+from graphics import GridVisualizer
+
+N = 9
+SUBGRID_SIZE = 3
 
 def main():
     problem = [
@@ -18,31 +24,34 @@ def main():
 
     print_grid(grid)
     print()
-    
-    solve(grid)
+
+    visualizer = GridVisualizer("Backtracking", 600, grid)
+    visualizer.run_blocking(lambda: solve(grid, 0, 0, visualizer))
 
     print_grid(grid)
 
 
 def print_grid(grid: np.ndarray[int, int]):
-    for row in range(9):
-        for col in range(9):
+    for row in range(N):
+        for col in range(N):
             print(grid[col, row], end=" ")
         print()
 
 
-def solve(grid: np.ndarray[int, int], row = 0, col = 0):
-    if row == grid.shape[0]:
+def solve(grid: np.ndarray[int, int], row, col, visualizer: GridVisualizer):
+    visualizer.update_grid(grid)
+    sleep(0.1)
+    if row == N:
         return True
-    elif col == grid.shape[0]:
-        return solve(grid, row + 1, 0)
+    elif col == N:
+        return solve(grid, row + 1, 0, visualizer)
     elif grid[col, row] != 0:
-        return solve(grid, row, col + 1)
+        return solve(grid, row, col + 1, visualizer)
     else:
-        for digit in range(1, grid.shape[0] + 1):
+        for digit in range(1, N + 1):
             if is_valid(grid, row, col, digit):
                 grid[col, row] = digit
-                if solve(grid, row, col + 1):
+                if solve(grid, row, col + 1, visualizer):
                     return True
                 else:
                     grid[col, row] = 0
@@ -58,11 +67,10 @@ def is_valid(grid, row: int, col: int, digit: int) -> bool:
             return False
 
     # Check subgrid
-    # TODO: Make this generalized
-    subgrid_first_col = col // 3 * 3
-    subgrid_first_row = row // 3 * 3
-    for c in range(subgrid_first_col, subgrid_first_col + 3):
-        for r in range(subgrid_first_row, subgrid_first_row + 3):
+    subgrid_first_col = col // SUBGRID_SIZE * SUBGRID_SIZE
+    subgrid_first_row = row // SUBGRID_SIZE * SUBGRID_SIZE
+    for c in range(subgrid_first_col, subgrid_first_col + SUBGRID_SIZE):
+        for r in range(subgrid_first_row, subgrid_first_row + SUBGRID_SIZE):
             if grid[c, r] == digit:
                 return False
 
