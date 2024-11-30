@@ -4,10 +4,11 @@ import numpy as np
 
 from graphics import GridVisualizer
 
-N = 5
+N = 4
 N_SQUARED = N * N
-PORTION_TO_REMOVE = 0.25
+PORTION_TO_REMOVE = 0.35
 SLEEP_SECONDS = 0.001
+WINDOW_SIZE = 600
 
 def main():
     EASY = [
@@ -54,14 +55,14 @@ def main():
     # grid = np.array(problem, dtype=int).transpose()
 
     grid = generate_valid()
-    visualizer = GridVisualizer("Solution", 900, grid, N)
+    visualizer = GridVisualizer("Solution", WINDOW_SIZE, 50, grid, N)
     visualizer.run_blocking()
 
     grid = make_problem(grid)
     print("Problem: ")
     print_grid(grid.copy().transpose())
     print()
-    visualizer = GridVisualizer("Problem", 900, grid, N)
+    visualizer = GridVisualizer("Problem", WINDOW_SIZE, grid, N)
     visualizer.run_blocking()
 
     print_grid(grid)
