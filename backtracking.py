@@ -32,9 +32,22 @@ def main():
         [0, 9, 0, 0, 0, 0, 4, 3, 0],
     ]
 
+    # https://abcnews.go.com/blogs/headlines/2012/06/can-you-solve-the-hardest-ever-sudoku
+    HARDEST = [
+        [8, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 3, 6, 0, 0, 0, 0, 0],
+        [0, 7, 0, 0, 9, 0, 2, 0, 0],
+        [0, 5, 0, 0, 0, 7, 0, 0, 0],
+        [0, 0, 0, 0, 4, 5, 7, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 3, 0],
+        [0, 0, 1, 0, 0, 0, 0, 6, 8],
+        [0, 0, 8, 5, 0, 0, 0, 1, 0],
+        [0, 9, 0, 0, 0, 0, 4, 0, 0],
+    ]
+
     #TODO: add more problems
 
-    problem = HARD
+    problem = HARDEST
 
     # Transposing so that grid can be accessed as grid[x][y]
     grid = np.array(problem, dtype=int).transpose()
@@ -56,8 +69,8 @@ def print_grid(grid: np.ndarray[int, int]):
 
 
 def solve(grid: np.ndarray[int, int], row, col, visualizer: GridVisualizer):
-    visualizer.update_grid(grid)
-    sleep(0.05)
+    # visualizer.update_grid(grid)
+    # sleep(0.001)
     if row == N:
         return True
     elif col == N:
