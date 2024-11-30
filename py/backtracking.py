@@ -6,7 +6,7 @@ from graphics import GridVisualizer
 
 N = 4
 N_SQUARED = N * N
-PORTION_TO_REMOVE = 0.35
+PORTION_TO_REMOVE = 0.8
 SLEEP_SECONDS = 0.001
 WINDOW_SIZE = 600
 
@@ -55,7 +55,7 @@ def main():
     # grid = np.array(problem, dtype=int).transpose()
 
     grid = generate_valid()
-    visualizer = GridVisualizer("Solution", WINDOW_SIZE, 50, grid, N)
+    visualizer = GridVisualizer("Solution", WINDOW_SIZE, grid, N)
     visualizer.run_blocking()
 
     grid = make_problem(grid)
