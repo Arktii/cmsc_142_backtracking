@@ -33,8 +33,7 @@ for (let i = 0; i < 9; i++) {
     }
   }
 }
-
-const delay = 100;
+const delay = parseInt(process.argv[2]) || 100;
 console.clear();
 solve(problem, delay);
 
