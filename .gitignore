@@ -1,3 +1,23 @@
+# motion canvas
+# Generated files
+sudoku-visuals/node_modules
+sudoku-visuals/output
+sudoku-visuals/dist
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 py/__pycache__/
