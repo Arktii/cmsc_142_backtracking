@@ -34,8 +34,9 @@ export default makeScene2D(function* (view) {
       <Board ref={board} grid={grid} />
 
       <Program ref={program} />
-    </Rect>,
+    </Rect>
   );
 
+  // board().set(0, 0, 9);
   yield* solve(board, 0, 0, program);
 });

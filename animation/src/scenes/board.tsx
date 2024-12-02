@@ -1,12 +1,18 @@
 import { Node, NodeProps, Rect, Txt } from "@motion-canvas/2d";
 import { ensureValidGrid } from "./solver";
-import { createSignal, SimpleSignal } from "@motion-canvas/core";
+import { Tile } from "./tile";
+import {
+  createSignal,
+  SimpleSignal,
+  createRef,
+  Reference,
+} from "@motion-canvas/core";
 
 const boardColor = "#303446";
 const tileColor = "#585b70";
 
 export class Board extends Node {
-  private items: SimpleSignal<number, number>[][];
+  private tileRefs: Reference<Tile>[][];
 
   public grid(): number[][] {
     // Create a grid and populate it with values from the signals
@@ -15,7 +21,7 @@ export class Board extends Node {
     for (let r = 0; r < 9; r++) {
       const row: number[] = []; // Create a row for each row in the grid
       for (let c = 0; c < 9; c++) {
-        row.push(this.items[r][c]()); // Access the signal value for each cell
+        row.push(this.tileRefs[r][c]().get()); // Access the signal value for each cell
       }
       grid.push(row); // Push the row to the grid
     }
@@ -24,11 +30,11 @@ export class Board extends Node {
   }
 
   public get(r: number, c: number): number {
-    return this.items[r][c]();
+    return this.tileRefs[r][c]().get();
   }
 
-  public *set(r: number, c: number, k: number) {
-    yield this.items[r][c](k);
+  public set(r: number, c: number, k: number) {
+    this.tileRefs[r][c]().set(k);
   }
 
   public constructor(props: NodeProps & { grid: number[][] }) {
@@ -36,9 +42,8 @@ export class Board extends Node {
 
     super({});
 
-    // Initialize items array with the correct size and signal values
-    this.items = Array.from({ length: 9 }, (_, r) =>
-      Array.from({ length: 9 }, (_, c) => createSignal(props.grid[r][c])),
+    this.tileRefs = Array.from({ length: 9 }, (_, r) =>
+      Array.from({ length: 9 }, (_, c) => createRef<Tile>())
     );
 
     const board = (
@@ -71,20 +76,7 @@ export class Board extends Node {
           row.add(<Rect fill={boardColor} width={10} height={85} />);
         }
 
-        const num = this.items[i][j];
-
-        row.add(
-          <Rect
-            fill={tileColor}
-            width={85}
-            height={85}
-            radius={10}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <Txt fill={"#949cbb"} fontWeight={700} text={num().toString()} />
-          </Rect>,
-        );
+        row.add(<Tile ref={this.tileRefs[i][j]} value={props.grid[i][j]} />);
       }
 
       if (i % 3 == 0 && i != 0) {

@@ -33,7 +33,7 @@ export function* solve(
   board: Reference<Board>,
   r: number,
   c: number,
-  program: Reference<Program>,
+  program: Reference<Program>
 ): Generator<any, boolean, unknown> {
   // Focus the current line and yield to animate
   yield* program().focusLine(r);
