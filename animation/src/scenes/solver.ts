@@ -33,21 +33,24 @@ export function* solve(
   board: Reference<Board>,
   r: number,
   c: number,
-  program: Reference<Program>,
+  program: Reference<Program>
 ): Generator<any, boolean, unknown> {
-  // Focus the current line and yield to animate
-  yield* program().focusLine(r);
-  yield* program().focusLine(c);
-
+  yield* program().focusLine(0);
+  yield* program().focusLine(1);
   if (r === 9) {
+    yield* program().focusLine(2);
     return true;
   } else if (c === 9) {
+    yield* program().focusLine(4);
     return yield* solve(board, r + 1, 0, program);
   } else if (board().grid()[r][c] !== 0) {
+    yield* program().focusLine(6);
     return yield* solve(board, r, c + 1, program);
   }
 
+  yield* program().focusLine(9);
   for (let k = 1; k <= 9; k++) {
+    yield* program().focusLine(10);
     if (isValid(board().grid(), r, c, k)) {
       board().set(r, c, k);
 
