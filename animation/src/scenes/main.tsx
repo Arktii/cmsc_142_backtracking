@@ -5,6 +5,17 @@ import { createRef } from "@motion-canvas/core";
 
 export default makeScene2D(function* (view) {
   const program = createRef<Program>();
+  const grid = [
+    [6, 9, 0, 1, 7, 0, 0, 0, 0],
+    [3, 5, 0, 0, 4, 0, 1, 0, 0],
+    [8, 0, 2, 3, 6, 0, 7, 0, 4],
+    [0, 0, 0, 0, 0, 0, 9, 0, 8],
+    [9, 4, 0, 0, 0, 0, 0, 0, 5],
+    [0, 0, 0, 5, 9, 0, 6, 3, 0],
+    [2, 6, 0, 0, 5, 0, 0, 8, 7],
+    [0, 8, 1, 0, 0, 6, 4, 9, 0],
+    [0, 7, 3, 0, 8, 2, 0, 1, 0],
+  ];
 
   view.add(
     <Rect
@@ -17,7 +28,7 @@ export default makeScene2D(function* (view) {
       alignItems={"center"}
       padding={100}
     >
-      <Board />
+      <Board grid={grid} />
 
       <Program ref={program} />
     </Rect>,

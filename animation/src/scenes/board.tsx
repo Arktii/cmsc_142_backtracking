@@ -1,12 +1,15 @@
 import { Node, NodeProps, Rect, Txt } from "@motion-canvas/2d";
-import { useRandom } from "@motion-canvas/core";
 
 const boardColor = "#303446";
 const tileColor = "#585b70";
 
 export class Board extends Node {
-  public constructor(props: NodeProps) {
-    super(props);
+  public constructor(props: NodeProps & { grid: number[][] }) {
+    super({});
+
+    if (props.grid.length != 9 && props.grid[0].length != 9) {
+      throw new Error("Invalid grid passed.");
+    }
 
     const board = (
       <Rect
@@ -21,8 +24,6 @@ export class Board extends Node {
         radius={10}
       />
     );
-
-    const random = useRandom();
 
     for (let i = 0; i < 9; i++) {
       const row = (
@@ -39,6 +40,9 @@ export class Board extends Node {
         if (j % 3 == 0 && j != 0) {
           row.add(<Rect fill={boardColor} width={10} height={85} />);
         }
+
+        const num = props.grid[i][j];
+
         row.add(
           <Rect
             fill={tileColor}
@@ -49,7 +53,7 @@ export class Board extends Node {
             alignItems={"center"}
           >
             <Txt fill={"#949cbb"} fontWeight={700}>
-              {String(random.nextInt(0, 10))}
+              {String(num === 0 ? "" : num)}
             </Txt>
           </Rect>,
         );
