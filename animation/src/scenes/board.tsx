@@ -1,15 +1,45 @@
 import { Node, NodeProps, Rect, Txt } from "@motion-canvas/2d";
+import { ensureValidGrid } from "./solver";
+import { createSignal, SimpleSignal } from "@motion-canvas/core";
 
 const boardColor = "#303446";
 const tileColor = "#585b70";
 
 export class Board extends Node {
+  private items: SimpleSignal<number, number>[][];
+
+  public grid(): number[][] {
+    // Create a grid and populate it with values from the signals
+    let grid: number[][] = [];
+
+    for (let r = 0; r < 9; r++) {
+      const row: number[] = []; // Create a row for each row in the grid
+      for (let c = 0; c < 9; c++) {
+        row.push(this.items[r][c]()); // Access the signal value for each cell
+      }
+      grid.push(row); // Push the row to the grid
+    }
+
+    return grid; // Return the filled grid
+  }
+
+  public get(r: number, c: number): number {
+    return this.items[r][c]();
+  }
+
+  public *set(r: number, c: number, k: number) {
+    yield this.items[r][c](k);
+  }
+
   public constructor(props: NodeProps & { grid: number[][] }) {
+    ensureValidGrid(props.grid);
+
     super({});
 
-    if (props.grid.length != 9 && props.grid[0].length != 9) {
-      throw new Error("Invalid grid passed.");
-    }
+    // Initialize items array with the correct size and signal values
+    this.items = Array.from({ length: 9 }, (_, r) =>
+      Array.from({ length: 9 }, (_, c) => createSignal(props.grid[r][c])),
+    );
 
     const board = (
       <Rect
@@ -41,7 +71,7 @@ export class Board extends Node {
           row.add(<Rect fill={boardColor} width={10} height={85} />);
         }
 
-        const num = props.grid[i][j];
+        const num = this.items[i][j];
 
         row.add(
           <Rect
@@ -52,9 +82,7 @@ export class Board extends Node {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <Txt fill={"#949cbb"} fontWeight={700}>
-              {String(num === 0 ? "" : num)}
-            </Txt>
+            <Txt fill={"#949cbb"} fontWeight={700} text={num().toString()} />
           </Rect>,
         );
       }

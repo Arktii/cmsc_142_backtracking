@@ -1,25 +1,26 @@
 import { Code, lines, Node, NodeProps } from "@motion-canvas/2d";
 import { createRef, Reference } from "@motion-canvas/core";
 
-const code = `
-function solve(grid) {
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      if (grid[i][j] === 0) {
-        for (let k = 1; k <= 9; k++) {
-          if (possible(grid, i, j, k)) {
-            grid[i][j] = k;
-            if (solve(grid)) return true;
-            grid[i][j] = 0;
-          }
-        }
-        return false;
+const code = `function solve(grid, r, c) {
+  if r = 9 {
+    return true
+  } else if c = 9 {
+    return solve(grid, r + 1, 0)
+  } else if grid[r][c] is not 0 {
+    return solve(grid, r, c + 1)
+  }
+
+  for k in 1..9 {
+    if isValid(grid, r, c, k) {
+      grid[r][c] = k;
+      if solve(grid, r, c + 1) {
+        return true;
       }
+      grid[r][c] = 0;
     }
   }
-  return true;
-}
-`;
+  return true
+}`;
 
 export class Program extends Node {
   private block: Reference<Code>;
@@ -31,7 +32,7 @@ export class Program extends Node {
     this.add(<Code fontSize={32} code={code} ref={this.block} />);
   }
 
-  public *moveLineTo(num: number) {
+  public *focusLine(num: number) {
     yield* this.block().selection(lines(num), 0.6);
   }
 }

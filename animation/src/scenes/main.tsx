@@ -2,9 +2,12 @@ import { makeScene2D, Rect } from "@motion-canvas/2d";
 import { Board } from "./board";
 import { Program } from "./program";
 import { createRef } from "@motion-canvas/core";
+import { solve } from "./solver";
 
 export default makeScene2D(function* (view) {
   const program = createRef<Program>();
+  const board = createRef<Board>();
+
   const grid = [
     [6, 9, 0, 1, 7, 0, 0, 0, 0],
     [3, 5, 0, 0, 4, 0, 1, 0, 0],
@@ -28,14 +31,11 @@ export default makeScene2D(function* (view) {
       alignItems={"center"}
       padding={100}
     >
-      <Board grid={grid} />
+      <Board ref={board} grid={grid} />
 
       <Program ref={program} />
     </Rect>,
   );
 
-  yield* program().moveLineTo(2);
-  yield* program().moveLineTo(3);
-  yield* program().moveLineTo(4);
-  yield* program().moveLineTo(5);
+  yield* solve(board, 0, 0, program);
 });
