@@ -23,6 +23,7 @@ export class Tile extends Node {
   public constructor(props: NodeProps & { value: number }) {
     super({ ...props });
     this.value = createSignal(props.value);
+
     this.add(
       <Rect
         fill={tileColor}
