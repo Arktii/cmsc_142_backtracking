@@ -15,7 +15,7 @@ export function isValid(
   r: number,
   c: number,
   num: number,
-  board: Reference<Board>
+  board: Reference<Board>,
 ) {
   // "highlight" tiles to be checked
   let x0 = Math.floor(r / 3) * 3;
@@ -50,22 +50,27 @@ export function* solve(
   board: Reference<Board>,
   r: number,
   c: number,
-  program: Reference<Program>
+  program: Reference<Program>,
 ): Generator<any, boolean, unknown> {
   board().uncheckAll();
   if (r < 9 && c < 9) board().focus(r, c);
 
   yield* program().focusLine(0);
   yield* program().focusLine(1);
-
   if (r === 9) {
     yield* program().focusLine(2);
     return true;
-  } else if (c === 9) {
+  }
+
+  yield* program().focusLine(3);
+  if (c === 9) {
     yield* program().focusLine(4);
     if (r < 9 && c < 9) board().focus(r, c);
     return yield* solve(board, r + 1, 0, program);
-  } else if (board().grid()[r][c] !== 0) {
+  }
+
+  yield* program().focusLine(5);
+  if (board().grid()[r][c] !== 0) {
     yield* program().focusLine(6);
     if (r < 9 && c < 9) board().focus(r, c);
     return yield* solve(board, r, c + 1, program);
