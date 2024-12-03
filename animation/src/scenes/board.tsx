@@ -36,9 +36,8 @@ export class Board extends Node {
     this.focusedTile().setFocus(1);
   }
 
-  public check(i: number, r: number, c: number, n: number) {
-    this.tileRefs[r][i]().setCheck(n);
-    this.tileRefs[i][c]().setCheck(n);
+  public check(r: number, c: number, n: number) {
+    this.tileRefs[r][c]().setCheck(n);
   }
 
   public get(r: number, c: number): number {

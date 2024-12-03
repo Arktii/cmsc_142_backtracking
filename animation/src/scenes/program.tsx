@@ -23,6 +23,8 @@ const code = `function solve(grid, r, c) {
 }`;
 
 export class Program extends Node {
+  private speed: number = 0.6;
+  private delta: number = 0.003;
   private block: Reference<Code>;
 
   public constructor(props: NodeProps) {
@@ -33,6 +35,10 @@ export class Program extends Node {
   }
 
   public *focusLine(num: number) {
-    yield* this.block().selection(lines(num), 0.6);
+    yield* this.block().selection(lines(num), this.speed);
+
+    if (this.speed > 0.01) {
+      this.speed -= this.delta;
+    }
   }
 }

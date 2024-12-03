@@ -18,11 +18,13 @@ export function isValid(
   board: Reference<Board>
 ) {
   for (let i = 0; i < 9; i++) {
-    // board().check(i, r, c, 1);
+    // board().check(r, i, 1);
+    // board().check(i, c, 1);
     if (grid[r][i] === num || grid[i][c] === num) {
       return false;
     }
-    // board().check(i, r, c, 0);
+    // board().check(r, i, 0);
+    // board().check(i, c, 0);
   }
 
   let x0 = Math.floor(r / 3) * 3;
@@ -58,7 +60,6 @@ export function* solve(
   }
 
   yield* program().focusLine(9);
-  board().focus(r, c);
   for (let k = 1; k <= 9; k++) {
     yield* program().focusLine(10);
     board().tentative(r, c, k);
@@ -74,6 +75,7 @@ export function* solve(
       }
 
       yield* program().focusLine(15);
+      board().tentative(r, c, 0);
       board().set(r, c, 0); // Reset the board state
     }
   }
