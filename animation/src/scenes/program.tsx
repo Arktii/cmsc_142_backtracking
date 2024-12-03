@@ -4,6 +4,7 @@ import {
   createSignal,
   SimpleSignal,
   Reference,
+  map,
 } from "@motion-canvas/core";
 
 const code = `function solve(grid, r, c) {
@@ -28,17 +29,31 @@ const code = `function solve(grid, r, c) {
 }`;
 
 export class Program extends Node {
-  private speed: number = 0.6;
+  private speed = 0.6;
   private delta: number = 0.003;
-  private line: SimpleSignal<number, number>;
   private block: Reference<Code>;
 
   public constructor(props: NodeProps) {
     super(props);
 
     this.block = createRef<Code>();
-    this.line = createSignal(0);
     this.add(<Code fontSize={32} code={code} ref={this.block} />);
+    this.block().drawHooks({
+      token(ctx, text, position, color, selection) {
+        // Measure the text's dimensions
+        const metrics = ctx.measureText(text);
+
+        // Apply a white overlay if the token is selected
+        if (selection > 0) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.05)"; // White with 80% opacity
+          ctx.fillRect(position.x, position.y - 10, metrics.width, 40);
+        }
+
+        // Draw the text
+        ctx.fillStyle = color;
+        ctx.fillText(text, position.x, position.y);
+      },
+    });
   }
 
   public *focusLine(num: number) {

@@ -38,7 +38,7 @@ export class Tile extends Node {
   }
 
   public constructor(
-    props: NodeProps & { value: number } & { isClue: boolean }
+    props: NodeProps & { value: number } & { isClue: boolean },
   ) {
     super({ ...props });
     this.isClue = props.isClue;
@@ -64,7 +64,10 @@ export class Tile extends Node {
         alignItems={"center"}
       >
         <Txt
-          fill={createSignal(() => {
+          fill={() => {
+            if (this.isClue) {
+              return "#8caaee";
+            }
             if (this.isFocused()) {
               return activeTextColor;
             } else if (this.tentative()) {
@@ -72,9 +75,9 @@ export class Tile extends Node {
             } else {
               return textColor;
             }
-          })}
+          }}
           fontWeight={700}
-          text={createSignal(() => {
+          text={() => {
             if (this.tentative()) {
               return String(this.tentative());
             } else if (this.value() == 0) {
@@ -82,9 +85,9 @@ export class Tile extends Node {
             } else {
               return String(this.value());
             }
-          })}
+          }}
         />
-      </Rect>
+      </Rect>,
     );
   }
 }
