@@ -10,11 +10,19 @@ export function ensureValidGrid(grid: number[][]) {
   }
 }
 
-export function isValid(grid: number[][], r: number, c: number, num: number) {
+export function isValid(
+  grid: number[][],
+  r: number,
+  c: number,
+  num: number,
+  board: Reference<Board>
+) {
   for (let i = 0; i < 9; i++) {
+    // board().check(i, r, c, 1);
     if (grid[r][i] === num || grid[i][c] === num) {
       return false;
     }
+    // board().check(i, r, c, 0);
   }
 
   let x0 = Math.floor(r / 3) * 3;
@@ -37,6 +45,7 @@ export function* solve(
 ): Generator<any, boolean, unknown> {
   yield* program().focusLine(0);
   yield* program().focusLine(1);
+
   if (r === 9) {
     yield* program().focusLine(2);
     return true;
@@ -51,7 +60,9 @@ export function* solve(
   yield* program().focusLine(9);
   for (let k = 1; k <= 9; k++) {
     yield* program().focusLine(10);
-    if (isValid(board().grid(), r, c, k)) {
+    // board().tentative(r, c, k);
+    board().focus(r, c);
+    if (isValid(board().grid(), r, c, k, board)) {
       yield* program().focusLine(11);
       board().set(r, c, k);
 

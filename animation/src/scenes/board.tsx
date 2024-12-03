@@ -34,11 +34,28 @@ export class Board extends Node {
     return this.tileRefs[r][c]().get();
   }
 
-  public set(r: number, c: number, k: number) {
+  public focus(r: number, c: number) {
     this.focusedTile().setFocus(0);
     this.focusedTile = this.tileRefs[r][c];
     this.focusedTile().setFocus(1);
+  }
+
+  public set(r: number, c: number, k: number) {
+    this.focus(r, c);
+    // this.focusedTile().setTentative(0);
     this.tileRefs[r][c]().set(k);
+  }
+
+  public check(i: number, r: number, c: number, n: number) {
+    this.tileRefs[r][i]().setCheck(n);
+    this.tileRefs[i][c]().setCheck(n);
+  }
+
+  public tentative(r: number, c: number, k: number) {
+    this.focusedTile().setTentative(0);
+    this.focus(r, c);
+    this.focusedTile().setTentative(1);
+    this.focusedTile().set(k);
   }
 
   public constructor(props: NodeProps & { grid: number[][] }) {

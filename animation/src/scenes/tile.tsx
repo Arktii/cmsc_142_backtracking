@@ -8,13 +8,17 @@ import {
 
 const tileColor = "#585b70";
 const activeTileColor = "#dce0e8";
+const checkingTileColor = "000000";
 
 const textColor = "#949cbb";
+const tentativeTextColor = "#949cbb";
 const activeTextColor = "#4c4f69";
 
 export class Tile extends Node {
   private value: SimpleSignal<number, number>;
   private isFocused: SimpleSignal<number, number>;
+  private isBeingChecked: SimpleSignal<number, number>;
+  private tentative: SimpleSignal<number, number>;
 
   public get(): number {
     return this.value();
@@ -28,15 +32,31 @@ export class Tile extends Node {
     this.isFocused(n);
   }
 
+  public setCheck(n: number) {
+    this.isBeingChecked(n);
+  }
+
+  public setTentative(n: number) {
+    this.tentative(n);
+  }
+
   public constructor(props: NodeProps & { value: number }) {
     super({ ...props });
     this.value = createSignal(props.value);
     this.isFocused = createSignal(0);
+    this.isBeingChecked = createSignal(0);
+    this.tentative = createSignal(0);
     this.add(
       <Rect
-        fill={createSignal(() =>
-          this.isFocused() ? activeTileColor : tileColor
-        )}
+        fill={createSignal(() => {
+          if (this.isFocused()) {
+            return activeTileColor;
+          } else if (this.isBeingChecked()) {
+            return checkingTileColor;
+          } else {
+            return tileColor;
+          }
+        })}
         width={85}
         height={85}
         radius={10}
@@ -44,9 +64,15 @@ export class Tile extends Node {
         alignItems={"center"}
       >
         <Txt
-          fill={createSignal(() =>
-            this.isFocused() ? activeTextColor : textColor
-          )}
+          fill={createSignal(() => {
+            if (this.isFocused()) {
+              return activeTextColor;
+            } else if (this.tentative()) {
+              return tentativeTextColor;
+            } else {
+              return textColor;
+            }
+          })}
           fontWeight={700}
           text={createSignal(() =>
             this.value() == 0 ? "" : String(this.value())
