@@ -58,9 +58,13 @@ export class Board extends Node {
   }
 
   public tentative(r: number, c: number, k: number) {
-    this.focusedTile().setTentative(0);
-    this.focus(r, c);
+    // this.focusedTile().setTentative(0);
+    // this.focus(r, c);
+
     this.focusedTile().setTentative(k);
+
+    // this.tileRefs[r][c]().setTentative(0);
+    // this.tileRefs[r][c]().setTentative(k);
   }
 
   public constructor(props: NodeProps & { grid: number[][] }) {
@@ -103,7 +107,13 @@ export class Board extends Node {
           row.add(<Rect fill={boardColor} width={10} height={85} />);
         }
 
-        row.add(<Tile ref={this.tileRefs[i][j]} value={props.grid[i][j]} />);
+        row.add(
+          <Tile
+            ref={this.tileRefs[i][j]}
+            value={props.grid[i][j]}
+            isClue={props.grid[i][j] !== 0}
+          />
+        );
       }
 
       if (i % 3 == 0 && i != 0) {

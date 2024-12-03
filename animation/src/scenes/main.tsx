@@ -1,7 +1,7 @@
 import { makeScene2D, Rect } from "@motion-canvas/2d";
 import { Board } from "./board";
 import { Program } from "./program";
-import { createRef } from "@motion-canvas/core";
+import { createRef, waitFor } from "@motion-canvas/core";
 import { solve } from "./solver";
 
 export default makeScene2D(function* (view) {
@@ -37,6 +37,5 @@ export default makeScene2D(function* (view) {
     </Rect>
   );
 
-  // board().set(0, 0, 9);
   yield* solve(board, 0, 0, program);
 });

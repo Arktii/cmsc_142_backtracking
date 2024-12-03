@@ -52,6 +52,9 @@ export function* solve(
   c: number,
   program: Reference<Program>
 ): Generator<any, boolean, unknown> {
+  board().uncheckAll();
+  if (r < 9 && c < 9) board().focus(r, c);
+
   yield* program().focusLine(0);
   yield* program().focusLine(1);
 
@@ -60,9 +63,11 @@ export function* solve(
     return true;
   } else if (c === 9) {
     yield* program().focusLine(4);
+    if (r < 9 && c < 9) board().focus(r, c);
     return yield* solve(board, r + 1, 0, program);
   } else if (board().grid()[r][c] !== 0) {
     yield* program().focusLine(6);
+    if (r < 9 && c < 9) board().focus(r, c);
     return yield* solve(board, r, c + 1, program);
   }
   yield* program().focusLine(9);
@@ -78,6 +83,7 @@ export function* solve(
       // Yield and continue animation, making sure each recursive step is animated
       yield* program().focusLine(12);
       if (yield* solve(board, r, c + 1, program)) {
+        board().tentative(r, c, 0);
         yield* program().focusLine(13);
         return true;
       }

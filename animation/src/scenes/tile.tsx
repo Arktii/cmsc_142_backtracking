@@ -1,17 +1,13 @@
 import { Node, NodeProps, Rect, Txt } from "@motion-canvas/2d";
-import {
-  createRef,
-  Reference,
-  SimpleSignal,
-  createSignal,
-} from "@motion-canvas/core";
+import { SimpleSignal, createSignal } from "@motion-canvas/core";
 
 const tileColor = "#585b70";
 const activeTileColor = "#dce0e8";
-const checkingTileColor = "#40a02b30";
+const checkingTileColor = "#dce0e820";
+const clueTileColor = "#585b70";
 
-const textColor = "#949cbb";
-const tentativeTextColor = "#949cbb";
+const textColor = "#cdd6f4";
+const tentativeTextColor = "#cad3f5";
 const activeTextColor = "#4c4f69";
 
 export class Tile extends Node {
@@ -19,6 +15,7 @@ export class Tile extends Node {
   private isFocused: SimpleSignal<boolean, boolean>;
   private isBeingChecked: SimpleSignal<boolean, boolean>;
   private tentative: SimpleSignal<number, number>;
+  private isClue: boolean = false;
 
   public get(): number {
     return this.value();
@@ -40,8 +37,11 @@ export class Tile extends Node {
     this.tentative(n);
   }
 
-  public constructor(props: NodeProps & { value: number }) {
+  public constructor(
+    props: NodeProps & { value: number } & { isClue: boolean }
+  ) {
     super({ ...props });
+    this.isClue = props.isClue;
     this.value = createSignal(props.value);
     this.isFocused = createSignal(false);
     this.isBeingChecked = createSignal(false);
@@ -54,7 +54,7 @@ export class Tile extends Node {
           } else if (this.isBeingChecked()) {
             return checkingTileColor;
           } else {
-            return tileColor;
+            return this.isClue ? clueTileColor : tileColor;
           }
         })}
         width={85}
@@ -74,18 +74,15 @@ export class Tile extends Node {
             }
           })}
           fontWeight={700}
-          text={createSignal(
-            () => {
-              if (this.tentative()) {
-                return String(this.tentative());
-              } else if (this.value() == 0) {
-                return "";
-              } else {
-                return String(this.value());
-              }
+          text={createSignal(() => {
+            if (this.tentative()) {
+              return String(this.tentative());
+            } else if (this.value() == 0) {
+              return "";
+            } else {
+              return String(this.value());
             }
-            // this.value() == 0 ? "" : String(this.value())
-          )}
+          })}
         />
       </Rect>
     );
