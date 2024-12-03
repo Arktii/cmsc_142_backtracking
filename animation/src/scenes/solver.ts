@@ -58,10 +58,10 @@ export function* solve(
   }
 
   yield* program().focusLine(9);
+  board().focus(r, c);
   for (let k = 1; k <= 9; k++) {
     yield* program().focusLine(10);
-    // board().tentative(r, c, k);
-    board().focus(r, c);
+    board().tentative(r, c, k);
     if (isValid(board().grid(), r, c, k, board)) {
       yield* program().focusLine(11);
       board().set(r, c, k);

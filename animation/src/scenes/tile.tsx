@@ -74,8 +74,17 @@ export class Tile extends Node {
             }
           })}
           fontWeight={700}
-          text={createSignal(() =>
-            this.value() == 0 ? "" : String(this.value())
+          text={createSignal(
+            () => {
+              if (this.tentative()) {
+                return String(this.tentative());
+              } else if (this.value() == 0) {
+                return "";
+              } else {
+                return String(this.value());
+              }
+            }
+            // this.value() == 0 ? "" : String(this.value())
           )}
         />
       </Rect>
