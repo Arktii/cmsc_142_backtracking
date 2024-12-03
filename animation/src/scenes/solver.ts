@@ -52,16 +52,21 @@ export function* solve(
   for (let k = 1; k <= 9; k++) {
     yield* program().focusLine(10);
     if (isValid(board().grid(), r, c, k)) {
+      yield* program().focusLine(11);
       board().set(r, c, k);
 
       // Yield and continue animation, making sure each recursive step is animated
+      yield* program().focusLine(12);
       if (yield* solve(board, r, c + 1, program)) {
+        yield* program().focusLine(13);
         return true;
       }
 
+      yield* program().focusLine(15);
       board().set(r, c, 0); // Reset the board state
     }
   }
 
+  yield* program().focusLine(18);
   return false;
 }
