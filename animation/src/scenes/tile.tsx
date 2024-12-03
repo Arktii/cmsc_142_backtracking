@@ -8,7 +8,7 @@ import {
 
 const tileColor = "#585b70";
 const activeTileColor = "#dce0e8";
-const checkingTileColor = "000000";
+const checkingTileColor = "#40a02b30";
 
 const textColor = "#949cbb";
 const tentativeTextColor = "#949cbb";
@@ -16,8 +16,8 @@ const activeTextColor = "#4c4f69";
 
 export class Tile extends Node {
   private value: SimpleSignal<number, number>;
-  private isFocused: SimpleSignal<number, number>;
-  private isBeingChecked: SimpleSignal<number, number>;
+  private isFocused: SimpleSignal<boolean, boolean>;
+  private isBeingChecked: SimpleSignal<boolean, boolean>;
   private tentative: SimpleSignal<number, number>;
 
   public get(): number {
@@ -28,11 +28,11 @@ export class Tile extends Node {
     this.value(k);
   }
 
-  public setFocus(n: number) {
+  public setFocus(n: boolean) {
     this.isFocused(n);
   }
 
-  public setCheck(n: number) {
+  public setCheck(n: boolean) {
     this.isBeingChecked(n);
   }
 
@@ -43,8 +43,8 @@ export class Tile extends Node {
   public constructor(props: NodeProps & { value: number }) {
     super({ ...props });
     this.value = createSignal(props.value);
-    this.isFocused = createSignal(0);
-    this.isBeingChecked = createSignal(0);
+    this.isFocused = createSignal(false);
+    this.isBeingChecked = createSignal(false);
     this.tentative = createSignal(0);
     this.add(
       <Rect

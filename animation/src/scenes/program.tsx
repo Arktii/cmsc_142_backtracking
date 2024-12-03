@@ -1,5 +1,10 @@
 import { Code, lines, Node, NodeProps } from "@motion-canvas/2d";
-import { createRef, Reference } from "@motion-canvas/core";
+import {
+  createRef,
+  createSignal,
+  SimpleSignal,
+  Reference,
+} from "@motion-canvas/core";
 
 const code = `function solve(grid, r, c) {
   if r = 9 {
@@ -25,12 +30,14 @@ const code = `function solve(grid, r, c) {
 export class Program extends Node {
   private speed: number = 0.6;
   private delta: number = 0.003;
+  private line: SimpleSignal<number, number>;
   private block: Reference<Code>;
 
   public constructor(props: NodeProps) {
     super(props);
 
     this.block = createRef<Code>();
+    this.line = createSignal(0);
     this.add(<Code fontSize={32} code={code} ref={this.block} />);
   }
 

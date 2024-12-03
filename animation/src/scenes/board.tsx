@@ -31,13 +31,21 @@ export class Board extends Node {
   }
 
   public focus(r: number, c: number) {
-    this.focusedTile().setFocus(0);
+    this.focusedTile().setFocus(false);
     this.focusedTile = this.tileRefs[r][c];
-    this.focusedTile().setFocus(1);
+    this.focusedTile().setFocus(true);
   }
 
-  public check(r: number, c: number, n: number) {
-    this.tileRefs[r][c]().setCheck(n);
+  public check(r: number, c: number, v: boolean) {
+    this.tileRefs[r][c]().setCheck(v);
+  }
+
+  public uncheckAll() {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        this.tileRefs[i][j]().setCheck(false);
+      }
+    }
   }
 
   public get(r: number, c: number): number {
