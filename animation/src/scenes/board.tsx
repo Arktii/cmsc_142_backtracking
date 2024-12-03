@@ -13,6 +13,7 @@ const tileColor = "#585b70";
 
 export class Board extends Node {
   private tileRefs: Reference<Tile>[][];
+  private focusedTile: Reference<Tile>;
 
   public grid(): number[][] {
     // Create a grid and populate it with values from the signals
@@ -34,6 +35,9 @@ export class Board extends Node {
   }
 
   public set(r: number, c: number, k: number) {
+    this.focusedTile().setFocus(0);
+    this.focusedTile = this.tileRefs[r][c];
+    this.focusedTile().setFocus(1);
     this.tileRefs[r][c]().set(k);
   }
 
@@ -45,6 +49,7 @@ export class Board extends Node {
     this.tileRefs = Array.from({ length: 9 }, (_, r) =>
       Array.from({ length: 9 }, (_, c) => createRef<Tile>())
     );
+    this.focusedTile = this.tileRefs[0][0];
 
     const board = (
       <Rect
