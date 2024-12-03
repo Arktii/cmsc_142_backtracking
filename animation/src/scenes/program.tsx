@@ -24,7 +24,7 @@ const code = `function solve(grid, r, c) {
       grid[r][c] = 0;
     }
   }
-  return true
+  return false
 }`;
 
 export class Program extends Node {
